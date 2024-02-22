@@ -413,11 +413,7 @@ if __name__ == "__main__":
 
     print(f"{Fore.BLUE}[*] New rows to process: {data.shape[0]}")
     if data.shape[0] != 0:
-        data = convert_phone_responses(data, "phone")
-        data = convert_appointment_time(raw_data, "appointment_time")
-        data = convert_other(raw_data, "making_appointment")
-        data = convert_other(raw_data, "overall_experience")
-        data = convert_other(raw_data, "website")
+
 
         columns_to_sum = [
             "phone",

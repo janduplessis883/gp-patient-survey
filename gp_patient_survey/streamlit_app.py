@@ -34,7 +34,7 @@ html = """
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
-
+st.sidebar.image('https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps.png?raw=true')
 @st.cache_data(ttl=100)
 def load_data():
     df = pd.read_csv("gp_patient_survey/data/data.csv")
@@ -137,7 +137,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
     # Data for plotting
     labels = "Positive", "Neutral", "Negative"
-    sizes = sentiment_totals(filtered_data)
+    sizes = sentiment_totals(surgery_data)
     colors = ["#6b899f", "#f0e8d2", "#ae4f4d"]
     explode = (0, 0, 0)  # 'explode' the 1st slice (Positive)
 
@@ -161,7 +161,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     st.pyplot(fig)
 
     # Resample and count the entries per month from filtered data
-    weekly_sent = filtered_data.resample("W", on="time")[
+    weekly_sent = surgery_data.resample("W", on="time")[
         "neg", "pos", "neu", "compound"
     ].mean()
     weekly_sent_df = weekly_sent.reset_index()
@@ -212,7 +212,7 @@ Below the chart is a multi-select field where you can choose to filter and revie
         )
 
     # Calculate value counts
-    label_counts = filtered_data["feedback_labels"].value_counts(
+    label_counts = surgery_data["feedback_labels"].value_counts(
         ascending=False
     )  # Use ascending=True to match the order in your image
 
@@ -247,13 +247,13 @@ Below the chart is a multi-select field where you can choose to filter and revie
 
     # View Patient Feedback
     st.subheader("View Patient Feedback")
-    class_list = list(filtered_data["feedback_labels"].unique())
+    class_list = list(surgery_data["feedback_labels"].unique())
     cleaned_class_list = [x for x in class_list if not pd.isna(x)]
     selected_ratings = st.multiselect("Select Feedback Categories:", cleaned_class_list)
 
     # Filter the data based on the selected classifications
-    filtered_classes = filtered_data[
-        filtered_data["feedback_labels"].isin(selected_ratings)
+    filtered_classes = surgery_data[
+        surgery_data["feedback_labels"].isin(selected_ratings)
     ]
 
     if not selected_ratings:
@@ -293,7 +293,7 @@ Rows are labeled with an Index, which you can think of as the address of the dat
     st.write("The data below is filtered based on the date range selected above.")
 
     # Display the filtered DataFrame
-    st.dataframe(filtered_data)
+    st.dataframe(surgery_data)
 
 # == About ==========================================================
 elif page == "About":
@@ -366,14 +366,14 @@ elif page == "GPT4 Summary":
 3. **Receive Your Summary**: Get a well-structured, comprehensive summary that highlights the core sentiments and suggestions from your patients."""
         )
 
-    filtered_data = surgery_data[
+    surgery_data = surgery_data[
         (surgery_data["time"].dt.date >= selected_date_range[0])
         & (surgery_data["time"].dt.date <= selected_date_range[1])
     ]
-    filtered_data["prompt"] = filtered_data["free_text"].str.cat(
-        filtered_data["do_better"], sep=" "
+    surgery_data["prompt"] = surgery_data["free_text"].str.cat(
+        surgery_data["do_better"], sep=" "
     )
-    series = pd.Series(filtered_data["prompt"])
+    series = pd.Series(surgery_data["prompt"])
     series.dropna(inplace=True)
     word_series = series.to_list()
     text = " ".join(word_series)
