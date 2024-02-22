@@ -414,7 +414,6 @@ if __name__ == "__main__":
     print(f"{Fore.BLUE}[*] New rows to process: {data.shape[0]}")
     if data.shape[0] != 0:
 
-
         columns_to_sum = [
             "phone",
             "appointment_time",

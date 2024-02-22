@@ -34,7 +34,11 @@ html = """
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
-st.sidebar.image('https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps.png?raw=true')
+st.sidebar.image(
+    "https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps.png?raw=true"
+)
+
+
 @st.cache_data(ttl=100)
 def load_data():
     df = pd.read_csv("gp_patient_survey/data/data.csv")
@@ -114,6 +118,30 @@ This time series plot displays the daily count of FFT responses over the same pe
 The final plot is a vertical bar chart showing the total count of FFT responses collected each month. The y-axis represents the count of responses, and the x-axis indicates the month. Each bar's height represents the total number of responses for that month, providing a clear comparison of month-to-month variation in the volume of feedback."""
         )
 
+    plt.figure(figsize=(12, 3))  # Width=12, Height=3
+    sns.countplot(y=surgery_data["phone"])
+    plt.title("Q1: How easy is it to ge throught so somone on the phone?")
+    st.pyplot(plt)
+
+    plt.figure(figsize=(12, 3))  # Width=12, Height=3
+    sns.countplot(y=surgery_data["appointment_time"])
+    plt.title("Q1: Choice of appointments")
+    st.pyplot(plt)
+
+    plt.figure(figsize=(12, 3))  # Width=12, Height=3
+    sns.countplot(y=surgery_data["making_appointment"])
+    plt.title("Q1: Making Appointment")
+    st.pyplot(plt)
+
+    plt.figure(figsize=(12, 3))  # Width=12, Height=3
+    sns.countplot(y=surgery_data["overall_experience"])
+    plt.title("Q1: Overall Experiene")
+    st.pyplot(plt)
+
+    plt.figure(figsize=(12, 3))  # Width=12, Height=3
+    sns.countplot(y=surgery_data["website"])
+    plt.title("Q5: Website?")
+    st.pyplot(plt)
 
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
