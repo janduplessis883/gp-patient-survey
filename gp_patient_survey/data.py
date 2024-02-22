@@ -30,7 +30,16 @@ def load_google_sheet():
         sheet_id=0,
     )
     data = sh.gsheet_to_df()
-    data.columns = ["time", "surgery", "phone", "appointment_time", "making_appointment", "overall_experience", "website", "free_text"]
+    data.columns = [
+        "time",
+        "surgery",
+        "phone",
+        "appointment_time",
+        "making_appointment",
+        "overall_experience",
+        "website",
+        "free_text",
+    ]
     data["time"] = pd.to_datetime(data["time"], format="%d/%m/%Y %H:%M:%S")
 
     return data
@@ -46,51 +55,54 @@ def word_count(df):
 def convert_phone_responses(df, column_name):
     # Define the mapping from string responses to numeric values
     mapping = {
-        'Very easy': 4,
-        'Fairly easy': 3,
-        'Not very easy': 2,
-        'Not at all easy': 1
+        "Very easy": 4,
+        "Fairly easy": 3,
+        "Not very easy": 2,
+        "Not at all easy": 1,
     }
     # Apply the mapping to the specified column
     df[column_name] = df[column_name].map(mapping)
     return df
 
+
 @time_it
 def convert_appointment_time(df, column_name):
     # Define the mapping from string responses to numeric values
     mapping2 = {
-        'Very satisfied' : 5,
-        'Fairly satisfied': 4,
-        'Neither satisfied nor dissatisfied': 3,
-        'Fairly dissatisfied': 2,
-        'Very dissatisfied': 1
+        "Very satisfied": 5,
+        "Fairly satisfied": 4,
+        "Neither satisfied nor dissatisfied": 3,
+        "Fairly dissatisfied": 2,
+        "Very dissatisfied": 1,
     }
     # Apply the mapping to the specified column
     df[column_name] = df[column_name].map(mapping2)
     return df
 
+
 @time_it
 def convert_other(df, column_name):
     # Define the mapping from string responses to numeric values
     mapping3 = {
-        'Very good' : 5,
-        'Fairly good': 4,
-        'Neither good nor poor': 3,
-        'Fairly poor': 2,
-        'Very poor': 1
+        "Very good": 5,
+        "Fairly good": 4,
+        "Neither good nor poor": 3,
+        "Fairly poor": 2,
+        "Very poor": 1,
     }
     # Apply the mapping to the specified column
     df[column_name] = df[column_name].map(mapping3)
     return df
 
+
 @time_it
 def add_row_values(df, columns):
     # Ensure columns are in the DataFrame
     columns_present = [col for col in columns if col in df.columns]
-    
+
     # Calculate the sum of the specified columns row-wise
-    df['row_sum'] = df[columns_present].sum(axis=1)
-    
+    df["row_sum"] = df[columns_present].sum(axis=1)
+
     return df
 
 
@@ -117,7 +129,6 @@ def text_classification(data):
     data["classif_scores"] = classif_scores
 
     return data
-
 
 
 @time_it
@@ -373,7 +384,6 @@ def feedback_classification(data, batch_size=16):
     return data
 
 
-
 @time_it
 def concat_save_final_df(processed_df, new_df):
     combined_data = pd.concat([processed_df, new_df], ignore_index=True)
@@ -403,22 +413,27 @@ if __name__ == "__main__":
 
     print(f"{Fore.BLUE}[*] New rows to process: {data.shape[0]}")
     if data.shape[0] != 0:
-        data = convert_phone_responses(data, 'phone')
-        data = convert_appointment_time(raw_data, 'appointment_time')
-        data = convert_other(raw_data, 'making_appointment')
-        data = convert_other(raw_data, 'overall_experience')
-        data = convert_other(raw_data, 'website')
-        
-        columns_to_sum = ['phone', 'appointment_time', 'making_appointment', 'overall_experience', 'website']
+        data = convert_phone_responses(data, "phone")
+        data = convert_appointment_time(raw_data, "appointment_time")
+        data = convert_other(raw_data, "making_appointment")
+        data = convert_other(raw_data, "overall_experience")
+        data = convert_other(raw_data, "website")
+
+        columns_to_sum = [
+            "phone",
+            "appointment_time",
+            "making_appointment",
+            "overall_experience",
+            "website",
+        ]
         data = add_row_values(data, columns_to_sum)
 
         data = word_count(data)  # word count
         data = anonymize(data)
         data = textblob_sentiment(data)
-        
+
         data = feedback_classification(data, batch_size=16)
 
-                
         concat_save_final_df(processed_data, data)
         do_git_merge()  # Push everything to GitHub
     else:

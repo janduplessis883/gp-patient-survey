@@ -13,8 +13,7 @@ DATA_PATH = os.path.join(
     os.path.expanduser("~"),
     "code",
     "janduplessis883",
-     "gp-patient-survey",
-     "gp_patient_survey",
-     "data",
+    "gp-patient-survey",
+    "gp_patient_survey",
+    "data",
 )
-

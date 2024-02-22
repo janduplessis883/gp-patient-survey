@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from wordcloud import WordCloud
+
 import seaborn as sns
 from datetime import datetime
 from datetime import date
@@ -35,6 +34,7 @@ html = """
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
+
 @st.cache_data(ttl=100)
 def load_data():
     df = pd.read_csv("gp_patient_survey/data/data.csv")
@@ -43,6 +43,7 @@ def load_data():
 
 
 data = load_data()
+
 
 @st.cache_data(ttl=100)  # This decorator enables caching for this function
 def get_surgery_data(data, selected_surgery):
@@ -92,8 +93,6 @@ centered_html = """
 
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(centered_html, unsafe_allow_html=True)
-
-
 
 
 # == DASHBOARD ==========================================================================================================
@@ -169,7 +168,7 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     weekly_sent_df.columns = ["Week", "neg", "pos", "neu", "compound"]
     weekly_sent_df["Week"] = pd.to_datetime(weekly_sent_df["Week"])
 
-    @st.cache_data(ttl=100) # This decorator caches the output of this function
+    @st.cache_data(ttl=100)  # This decorator caches the output of this function
     def calculate_weekly_sentiment(data):
         """
         Calculate the weekly sentiment averages from the given DataFrame.
@@ -194,7 +193,6 @@ Select Patient feedback to review, this page only displays feedback that on Sent
 
         return weekly_sent_df
 
-    
 
 # == Feedback Classification ========================================================================================
 elif page == "Feedback Classification":
@@ -347,8 +345,6 @@ We employ several machine learning techniques for analysis:
         )
 
 
-
-
 # == Generate ChatGPT Summaries ==========================================================
 elif page == "GPT4 Summary":
     st.subheader("GPT4 Summary")
@@ -441,4 +437,3 @@ elif page == "GPT4 Summary":
         st.image(
             "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/unnamed.jpg?raw=true"
         )
-
