@@ -483,33 +483,10 @@ We employ several machine learning techniques for analysis:
 
 # == Generate ChatGPT Summaries ==========================================================
 elif page == "GPT4 Summary":
-    st.subheader("GPT4 Summary")
-    toggle = ui.switch(
-        default_checked=False, label="Explain this page.", key="switch_dash"
-    )
-    if toggle:
-        st.markdown(
-            """**What This Page Offers:**
+ 
 
-**Automated Summaries**: Leveraging OpenAI's cutting-edge ChatGPT-4, we transform the Friends & Family Test feedback and improvement suggestions into concise, actionable insights.  
-**Time-Specific Insights**: Select the period that matters to you. Whether it's a week, a month, or a custom range, our tool distills feedback relevant to your chosen timeframe.  
-**Efficient Meeting Preparations**: Prepare for meetings with ease. Our summaries provide a clear overview of patient feedback, enabling you to log actions and decisions swiftly and accurately.  
 
-**How It Works**:
-
-1. **Select Your Time Period**: Choose the dates that you want to analyze.  
-2. **AI-Powered Summarization**: ChatGPT-4 reads through the feedback and suggestions, understanding the nuances and key points.  
-3. **Receive Your Summary**: Get a well-structured, comprehensive summary that highlights the core sentiments and suggestions from your patients."""
-        )
-
-    surgery_data = surgery_data[
-        (surgery_data["time"].dt.date >= selected_date_range[0])
-        & (surgery_data["time"].dt.date <= selected_date_range[1])
-    ]
-    surgery_data["prompt"] = surgery_data["free_text"].str.cat(
-        surgery_data["do_better"], sep=" "
-    )
-    series = pd.Series(surgery_data["prompt"])
+    series = pd.Series(surgery_data["free_text"])
     series.dropna(inplace=True)
     word_series = series.to_list()
     text = " ".join(word_series)
