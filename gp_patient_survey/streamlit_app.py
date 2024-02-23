@@ -471,7 +471,7 @@ Rows are labeled with an Index, which you can think of as the address of the dat
 
 # == About ==========================================================
 elif page == "About":
-    st.subheader("About (FFT Dashboard)")
+    st.subheader("About")
     # st.image(
     #     "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/fftestabout.png?raw=true",
     #     use_column_width=True,
