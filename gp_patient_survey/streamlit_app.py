@@ -101,47 +101,103 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 
 # == DASHBOARD ==========================================================================================================
 if page == "Dashboard":
-    toggle = ui.switch(
-        default_checked=False, label="Explain this page.", key="switch_dash"
-    )
-    # React to the toggle's state
-
-    if toggle:
-        st.markdown(
-            """1. **Average Monthly Rating (Line Chart)**:
-This line chart shows the average rating given by patients each month. The y-axis represents the average rating, and the x-axis represents time. Each point on the line represents the average rating for that month, allowing viewers to track changes over time.
-2. **Rating Distribution (Horizontal Bar Chart)**:
-The horizontal bar chart below the line chart represents the distribution of ratings across different categories such as 'Extremely likely', 'Likely', 'Neither likely nor unlikely', 'Unlikely', 'Extremely unlikely', and 'Don't know'. The length of each bar correlates with the count of responses in each category.
-3. **Daily FFT Responses (Time Series Plot)**:
-This time series plot displays the daily count of FFT responses over the same period. The y-axis shows the number of responses, while the x-axis corresponds to the days within each month. Spikes in the graph may indicate specific days when an unusually high number of responses were collected.
-4. **Monthly FFT Responses (Bar Chart)**:
-The final plot is a vertical bar chart showing the total count of FFT responses collected each month. The y-axis represents the count of responses, and the x-axis indicates the month. Each bar's height represents the total number of responses for that month, providing a clear comparison of month-to-month variation in the volume of feedback."""
-        )
-
-    plt.figure(figsize=(12, 3))  # Width=12, Height=3
-    sns.countplot(y=surgery_data["phone"])
-    plt.title("Q1: How easy is it to ge throught so somone on the phone?")
+    st.header('GP Patient Survey Responses')
+    cols = st.columns(2)
+    with cols[0]:
+        ui.metric_card(title="2024 PCN Survey - Total Responses", content=f"{surgery_data.shape[0]}", description=f"6.25% op practice list size.", key="total")
+    with cols[1]:
+        ui.metric_card(title="2023 National GP Pt Survey Responses", content=f"116", description=f"2.9% op practice list size.", key="total2")
+        
+        
+    st.subheader("Q1. Generally, how easy is it to get through to someone at your GP practice on the phone?")
+    fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
+    sns.countplot(y=surgery_data["phone"], ax=ax)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    ax.set_title("Phone")
+    ax.set_ylabel("")
+    for p in ax.patches:
+        width = p.get_width()  # Get the width of the bar
+        ax.text(width + 0.3,  # Set the text at 0.3 unit right of the bar
+                p.get_y() + p.get_height() / 2,  # Set the text at the center of the bar's height
+                f"{int(width)} / {round((int(width)/surgery_data.shape[0])*100, 1)}%",
+                va = 'center')  # Center the text vertically
     st.pyplot(plt)
 
-    plt.figure(figsize=(12, 3))  # Width=12, Height=3
-    sns.countplot(y=surgery_data["appointment_time"])
-    plt.title("Q1: Choice of appointments")
+    st.subheader("Q2. How satisfied are you with the general practice appointment times that are available to you?")
+    fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
+    sns.countplot(y=surgery_data["appointment_time"], ax=ax)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    ax.set_title("Appointment Times")
+    ax.set_ylabel("")
+    for p in ax.patches:
+        width = p.get_width()  # Get the width of the bar
+        ax.text(width + 0.3,  # Set the text at 0.3 unit right of the bar
+                p.get_y() + p.get_height() / 2,  # Set the text at the center of the bar's height
+                f"{int(width)} / {round((int(width)/surgery_data.shape[0])*100, 1)}%",
+                va = 'center')  # Center the text vertically
     st.pyplot(plt)
 
-    plt.figure(figsize=(12, 3))  # Width=12, Height=3
-    sns.countplot(y=surgery_data["making_appointment"])
-    plt.title("Q1: Making Appointment")
+    st.subheader("Q3. Overall, how would you describe your experience of making an appointment?")
+    fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
+    sns.countplot(y=surgery_data["making_appointment"], ax=ax)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    ax.set_title("Making an Appointment")
+    ax.set_ylabel("")
+    for p in ax.patches:
+        width = p.get_width()  # Get the width of the bar
+        ax.text(width + 0.3,  # Set the text at 0.3 unit right of the bar
+                p.get_y() + p.get_height() / 2,  # Set the text at the center of the bar's height
+                f"{int(width)} / {round((int(width)/surgery_data.shape[0])*100, 1)}%",
+                va = 'center')  # Center the text vertically
     st.pyplot(plt)
 
-    plt.figure(figsize=(12, 3))  # Width=12, Height=3
-    sns.countplot(y=surgery_data["overall_experience"])
-    plt.title("Q1: Overall Experiene")
+    st.subheader("Q4. Overall, how would you describe your experience of your GP practice?")
+    fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
+    sns.countplot(y=surgery_data["overall_experience"], ax=ax)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    ax.set_title("Experience GP Practice")
+    ax.set_ylabel("")
+    for p in ax.patches:
+        width = p.get_width()  # Get the width of the bar
+        ax.text(width + 0.3,  # Set the text at 0.3 unit right of the bar
+                p.get_y() + p.get_height() / 2,  # Set the text at the center of the bar's height
+                f"{int(width)} / {round((int(width)/surgery_data.shape[0])*100, 1)}%",
+                va = 'center')  # Center the text vertically
     st.pyplot(plt)
 
-    plt.figure(figsize=(12, 3))  # Width=12, Height=3
-    sns.countplot(y=surgery_data["website"])
-    plt.title("Q5: Website?")
-    st.pyplot(plt)
+    st.subheader("Q5. Overall, how easy is your GP practice's website to use?")
+    fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
+    sns.countplot(y=surgery_data["website"], ax=ax)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    ax.set_title("Surgery Website")
+    ax.set_ylabel("")
+    for p in ax.patches:
+        width = p.get_width()  # Get the width of the bar
+        ax.text(width + 0.3,  # Set the text at 0.3 unit right of the bar
+                p.get_y() + p.get_height() / 2,  # Set the text at the center of the bar's height
+                f"{int(width)} / {round((int(width)/surgery_data.shape[0])*100, 1)}%",
+                va = 'center')  # Center the text vertically
+    st.pyplot()
 
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
