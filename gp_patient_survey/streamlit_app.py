@@ -83,7 +83,7 @@ st.sidebar.container(height=5, border=0)
 page = st.sidebar.radio(
     "Choose a Page",
     [
-        "Dashboard",
+        "Survey Outcome",
         "Feedback Classification",
         "Sentiment Analysis",
         "GPT4 Summary",
@@ -113,7 +113,7 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 
 
 # == DASHBOARD ==========================================================================================================
-if page == "Dashboard":
+if page == "Survey Outcome":
     st.header(f"{selected_surgery}")
 
     cols = st.columns(2)
@@ -149,6 +149,12 @@ if page == "Dashboard":
     st.subheader(
         "Q1. Generally, how easy is it to get through to someone at your GP practice on the phone?"
     )
+    counts = surgery_data['phone'].value_counts()
+    to_count1 = counts['Very easy']
+    to_count2 = counts['Fairly easy']
+    st.markdown(f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** find it easy to get through to this GP practice by phone] ")
+    st.markdown(":grey[ICS result: 59% National result: 50%]")
+ 
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(y=surgery_data["phone"], ax=ax, order=order1, palette=palette1)
     ax.spines["top"].set_visible(False)
@@ -188,7 +194,12 @@ if page == "Dashboard":
         "Fairly dissatisfied": "#95c0d6",
         "Very dissatisfied": "#95c0d6",
     }
-
+    
+    counts = surgery_data['appointment_time'].value_counts()
+    to_count1 = counts['Very satisfied']
+    to_count2 = counts['Fairly satisfied']
+    st.markdown(f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** are satisfied with the general practice appointment times available.] ")
+    st.markdown(":grey[ICS result: 57% National result: 53%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["appointment_time"], ax=ax, order=order3, palette=palette3
@@ -230,6 +241,12 @@ if page == "Dashboard":
     st.subheader(
         "Q3. Overall, how would you describe your experience of making an appointment?"
     )
+    
+    counts = surgery_data['making_appointment'].value_counts()
+    to_count1 = counts['Very good']
+    to_count2 = counts['Fairly good']
+    st.markdown(f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their experience of making an appointment as good.] ")
+    st.markdown(":grey[ICS result: 57% National result: 54%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["making_appointment"], ax=ax, order=order, palette=palette
@@ -255,6 +272,12 @@ if page == "Dashboard":
     st.subheader(
         "Q4. Overall, how would you describe your experience of your GP practice?"
     )
+    
+    counts = surgery_data['overall_experience'].value_counts()
+    to_count1 = counts['Very good']
+    to_count2 = counts['Fairly good']
+    st.markdown(f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their overall experience of this GP practice as good.]")
+    st.markdown(":grey[ICS result: 70% National result: 71%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["overall_experience"], ax=ax, order=order, palette=palette
@@ -277,7 +300,12 @@ if page == "Dashboard":
         )  # Center the text vertically
     st.pyplot(plt)
 
-    st.subheader("Q5. Overall, how easy is your GP practice's website to use?")
+    st.subheader("Q5. Overall, had a good experiece using the surgery website.")
+    
+    counts = surgery_data['website'].value_counts()
+    to_count1 = counts['Very good']
+    to_count2 = counts['Fairly good']
+    st.markdown(f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** had a good experiece using the surgery website.]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(y=surgery_data["website"], ax=ax, order=order, palette=palette)
     ax.spines["top"].set_visible(False)
@@ -300,8 +328,8 @@ if page == "Dashboard":
 
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
-    st.subheader("Sentiment Analysis")
-
+    st.subheader("Free-Text Feedback Sentiment Analysis")
+    st.container(height=15, border=False)
     filtered_data = surgery_data[pd.notna(surgery_data["free_text"])]
 
     # Data for plotting
@@ -483,7 +511,7 @@ We employ several machine learning techniques for analysis:
 
 # == Generate ChatGPT Summaries ==========================================================
 elif page == "GPT4 Summary":
- 
+    st.subheader("GPT4 Feedback Summary")
 
 
     series = pd.Series(surgery_data["free_text"])
