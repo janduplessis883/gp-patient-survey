@@ -130,40 +130,97 @@ def text_classification(data):
 
     return data
 
-
-@time_it
-def anonymize(df):
-    # List of surnames to look for
-    surnames_to_find = [
-        "burhan",
-        "adib",
-        "emiliani",
-        "alex",
-        "florko",
-        "florka",
-        "lula",
-        "joyce",
-        "christine",
-        "jan",
-        "orietta",
-        "param",
-        "brodie",
-        "scudder",
-        "tim",
-        "rees",
+surnames_to_find = [
+        'Mark',
+        'Sweeney',
+        'Katherine',
+        'Brunton',
+        'Bi',
+        'Sapuay',
+        'Rebecca',
+        'Goldschmidt',
+        'Azhar',
+        'Janmohamed',
+        'Rebecca',
+        'Hayes',
+        'Shafia',
+        'Hakeem',
+        'Joshua',
+        'Martin',
+        'Aman',
+        'Hargandewal',
+        'Zein',
+        'Toukan',
+        'Huw',
+        "D'Costa",
+        'Elizabeth',
+        "O'Connor",
+        'Mary',
+        'McMahon',
+        'Moriam',
+        'Rahaman',
+        'Tim',
+        'Rees',
+        'Fiona',
+        'Butler',
+        'Shabeena',
+        'Aziz',
+        'Harriet',
+        'Wright',
+        'Anna',
+        'Grimstone',
+        'Nina',
+        'Brunker',
+        'Naila',
+        'Aslam',
+        'Rachel',
+        'Wilson',
+        'Eleanor',
+        'Titley',
+        'Khushhal',
+        'Safi',
+        'Rowena',
+        'Caballero',
+        'Rubeena',
+        'Ismail',
+        'Charlette',
+        'Lok',
+        'Anastasia',
+        'Baker',
+        'Kimiko',
+        'Hoban',
+        'Debbie',
+        'Gallon',
+        'Ahmed',
+        'Rizk',
+        'Maria',
+        'Pankhurst',
+        'Caroline',
+        'Stott',
+        'Emily',
+        'Baker',
+        'Rosanna',
+        'Younger',
+        'Imogen',
+        'Yates'
     ]
 
-    # Function to replace surnames in text
-    def replace_surname(text):
-        for surname in surnames_to_find:
-            # Create a regular expression pattern for the surname
-            pattern = r"\b" + re.escape(surname) + r"\b"
-            # Replace the surname with its first letter and a period
-            text = re.sub(pattern, surname[0], text)
-        return text
+# Function to replace surnames in text
+def replace_surname(text, surnames_to_find):
+    # Convert the text to lowercase for case-insensitive matching
+    lower_text = text.lower()
+    for surname in surnames_to_find:
+        # Ensure the surname is also in lowercase
+        lower_surname = surname.lower()
+        # Replace the surname in the text with "🧍🏻", using the lowercase versions for comparison
+        lower_text = lower_text.replace(lower_surname, "🧍🏻")
+    # Return the modified text with surnames replaced
+    return lower_text
 
-    # Apply the function to the 'free_text' column
-    df["free_text"] = df["free_text"].apply(replace_surname)
+@time_it
+def anonymize(df, surnames_to_find):
+    # Apply the function to the 'free_text' column with a lambda to ensure case-insensitive replacement
+    df["free_text"] = df["free_text"].apply(lambda text: replace_surname(text, surnames_to_find))
     return df
 
 
@@ -424,7 +481,7 @@ if __name__ == "__main__":
         data = add_row_values(data, columns_to_sum)
 
         data = word_count(data)  # word count
-        data = anonymize(data)
+        data = anonymize(data, surnames_to_find)
         data = textblob_sentiment(data)
 
         data = feedback_classification(data, batch_size=16)
