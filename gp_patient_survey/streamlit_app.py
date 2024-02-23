@@ -101,7 +101,8 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 
 # == DASHBOARD ==========================================================================================================
 if page == "Dashboard":
-    st.header("GP Patient Survey Responses")
+    st.header(f"{selected_surgery}")
+    st.subheader("GP Patient Survey Responses")
     cols = st.columns(2)
     with cols[0]:
         ui.metric_card(
