@@ -107,7 +107,7 @@ if page == "Dashboard":
         ui.metric_card(
             title="2024 PCN Survey - Total Responses",
             content=f"{surgery_data.shape[0]}",
-            description=f"6.25% op practice list size.",
+            description=f"{round(surgery_data.shape[0]/4000*100, 2)}% op practice list size.",
             key="total",
         )
     with cols[1]:
@@ -158,8 +158,27 @@ if page == "Dashboard":
     st.subheader(
         "Q2. How satisfied are you with the general practice appointment times that are available to you?"
     )
+
+    order3 = [
+        "Very satisfied",
+        "Fairly satisfied",
+        "Neither satisfied nor dissatisfied",
+        "Fairly dissatisfied",
+        "Very dissatisfied",
+    ]
+
+    palette3 = {
+        "Very satisfied": "#204e82",
+        "Fairly satisfied": "#204e82",
+        "Neither satisfied nor dissatisfied": "#95c0d6",
+        "Fairly dissatisfied": "#95c0d6",
+        "Very dissatisfied": "#95c0d6",
+    }
+
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
-    sns.countplot(y=surgery_data["appointment_time"], ax=ax)
+    sns.countplot(
+        y=surgery_data["appointment_time"], ax=ax, order=order3, palette=palette3
+    )
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
@@ -268,26 +287,12 @@ if page == "Dashboard":
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
     st.subheader("Sentiment Analysis")
-    toggle = ui.switch(
-        default_checked=False, label="Explain this page.", key="switch_dash"
-    )
 
-    # React to the toggle's state
-    if toggle:
-        st.markdown(
-            """1. **Scatter Plot (Top Plot)**:
-This plot compares patient feedback sentiment scores with feedback rating scores. On the x-axis, we have the rating score, which likely corresponds to a numerical score given by the patient in their feedback, and on the y-axis, we have the sentiment score, which is derived from sentiment analysis of the textual feedback provided by the patient. Each point represents a piece of feedback, categorized as 'positive', 'neutral', or 'negative' sentiment, depicted by different markers. The scatter plot shows a clear positive correlation between the sentiment score and the feedback rating score, especially visible with the concentration of 'positive' sentiment scores at the higher end of the rating score scale, suggesting that more positive text feedback corresponds to higher numerical ratings.
-2. **Histogram with a Density Curve (Bottom Left - NEGATIVE Sentiment)**:
-This histogram displays the distribution of sentiment scores specifically for negative sentiment feedback. The x-axis represents the sentiment score (presumably on a scale from 0 to 1), and the y-axis represents the count of feedback instances within each score range. The bars show the frequency of feedback at different levels of negative sentiment, and the curve overlaid on the histogram provides a smooth estimate of the distribution. The distribution suggests that most negative feedback has a sentiment score around 0.7 to 0.8.
-3. **Histogram with a Density Curve (Bottom Right - POSITIVE Sentiment)**:
-Similar to the negative sentiment histogram, this one represents the distribution of sentiment scores for positive sentiment feedback. Here, we see a right-skewed distribution with a significant concentration of feedback in the higher sentiment score range, particularly close to 1.0. This indicates that the positive feedback is often associated with high sentiment scores, which is consistent with the expected outcome of sentiment analysis.
-4. **View Patient Feedback (Multi-Select Input)**:
-Select Patient feedback to review, this page only displays feedback that on Sentiment Analysis scored **NEGATIVE > Selected Value (using slider)**, indicating negative feedback despite rating given by the patient. It is very important to review feedback with a high NEG sentiment analysis. In this section both feedback and Improvement Suggestions are displayed to review them in context, together with the automated category assigned by our machine learning model."""
-        )
+    filtered_data = surgery_data[pd.notna(surgery_data["free_text"])]
 
     # Data for plotting
     labels = "Positive", "Neutral", "Negative"
-    sizes = sentiment_totals(surgery_data)
+    sizes = sentiment_totals(filtered_data)
     colors = ["#6b899f", "#f0e8d2", "#ae4f4d"]
     explode = (0, 0, 0)  # 'explode' the 1st slice (Positive)
 
@@ -307,41 +312,8 @@ Select Patient feedback to review, this page only displays feedback that on Sent
     centre_circle = plt.Circle((0, 0), 0.50, fc="white")
     fig.gca().add_artist(centre_circle)
 
-    plt.title("Patient Feedback Sentiment Distribution")
+    plt.title("Cumulative Sentiment Analysis Overview")
     st.pyplot(fig)
-
-    # Resample and count the entries per month from filtered data
-    weekly_sent = surgery_data.resample("W", on="time")[
-        "neg", "pos", "neu", "compound"
-    ].mean()
-    weekly_sent_df = weekly_sent.reset_index()
-    weekly_sent_df.columns = ["Week", "neg", "pos", "neu", "compound"]
-    weekly_sent_df["Week"] = pd.to_datetime(weekly_sent_df["Week"])
-
-    @st.cache_data(ttl=100)  # This decorator caches the output of this function
-    def calculate_weekly_sentiment(data):
-        """
-        Calculate the weekly sentiment averages from the given DataFrame.
-
-        Parameters:
-        data (DataFrame): The DataFrame containing sentiment scores and time data.
-
-        Returns:
-        DataFrame: A DataFrame with weekly averages of sentiment scores.
-        """
-        # Resample the data to a weekly frequency and calculate the mean of sentiment scores
-        weekly_sent = data.resample("W", on="time")[
-            "neg", "pos", "neu", "compound"
-        ].mean()
-
-        # Reset the index to turn the 'time' index into a column and rename columns
-        weekly_sent_df = weekly_sent.reset_index()
-        weekly_sent_df.columns = ["Week", "neg", "pos", "neu", "compound"]
-
-        # Convert the 'Week' column to datetime format
-        weekly_sent_df["Week"] = pd.to_datetime(weekly_sent_df["Week"])
-
-        return weekly_sent_df
 
 
 # == Feedback Classification ========================================================================================
