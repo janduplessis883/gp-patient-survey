@@ -47,6 +47,19 @@ def load_data():
 
 
 data = load_data()
+surgery_data = [
+    {"surgery": "Earls Court Medical Centre", "list_size": 0},
+    {"surgery": "Earls Court Surgery", "list_size": 4129},
+    {"surgery": "Emperor's Gate Health Centre", "list_size": 0},
+    {"surgery": "Health Partners at Violet Melchett", "list_size": 0},
+    {"surgery": "Knightsbridge Medical Centre", "list_size": 0},
+    {"surgery": "Royal Hospital Chelsea", "list_size": 0},
+    {"surgery": "Scarsdale Medical Centre", "list_size": 0},
+    {"surgery": "Stanhope Mews Surgery", "list_size": 0},
+    {"surgery": "The Abingdon Medical Practice", "list_size": 0},
+    {"surgery": "The Chelsea Practice", "list_size": 0},
+    {"surgery": "The Good Practice", "list_size": 0},
+]
 
 
 @st.cache_data(ttl=100)  # This decorator enables caching for this function
@@ -64,7 +77,7 @@ selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
 
 # Call the function with the selected surgery
 surgery_data = get_surgery_data(data, selected_surgery)
-
+# list_size = next((surgery["list_size"] for surgery in surgery_data if surgery["surgery"] == selected_surgery), None)
 st.sidebar.container(height=5, border=0)
 
 page = st.sidebar.radio(
@@ -108,7 +121,7 @@ if page == "Dashboard":
         ui.metric_card(
             title="2024 PCN Survey - Total Responses",
             content=f"{surgery_data.shape[0]}",
-            description=f"{round(surgery_data.shape[0]/4000*100, 2)}% op practice list size.",
+            description=f"{round(surgery_data.shape[0]/4129*100, 2)}% op practice list size.",
             key="total",
         )
     with cols[1]:
