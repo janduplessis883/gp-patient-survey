@@ -176,7 +176,7 @@ if page == "Survey Outcome":
             va="center",
         )  # Center the text vertically
     st.pyplot(plt)
-
+    st.markdown("---")
     st.subheader(
         "Q2. How satisfied are you with the general practice appointment times that are available to you?"
     )
@@ -225,7 +225,7 @@ if page == "Survey Outcome":
             va="center",
         )  # Center the text vertically
     st.pyplot(plt)
-
+    st.markdown("---")
     order = [
         "Very good",
         "Fairly good",
@@ -274,7 +274,7 @@ if page == "Survey Outcome":
             va="center",
         )  # Center the text vertically
     st.pyplot(plt)
-
+    st.markdown("---")
     st.subheader(
         "Q4. Overall, how would you describe your experience of your GP practice?"
     )
@@ -307,7 +307,7 @@ if page == "Survey Outcome":
             va="center",
         )  # Center the text vertically
     st.pyplot(plt)
-
+    st.markdown("---")
     st.subheader("Q5. Overall, had a good experiece using the surgery website.")
 
     counts = surgery_data["website"].value_counts()
