@@ -55,3 +55,4 @@ setfit
 ollama
 skimpy
 streamlit-shadcn-ui  
+loguru

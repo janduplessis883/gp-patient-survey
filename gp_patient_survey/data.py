@@ -94,6 +94,22 @@ def convert_other(df, column_name):
     df[column_name] = df[column_name].map(mapping3)
     return df
 
+# Load a pre-trained NER pipeline
+ner_pipeline = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english", aggregation_strategy="simple")
+
+# Function to anonymize names in text
+@time_it
+def anonymize_names_with_transformers(text):
+    # Run the NER pipeline on the input text
+    entities = ner_pipeline(text)
+    anonymized_text = text
+    # Iterate over detected entities
+    for entity in entities:
+        # Check if the entity is a person
+        if entity['entity_group'] == 'PER':
+            # Replace the detected name with [PERSON]
+            anonymized_text = anonymized_text.replace(entity['word'], '[PERSON]')
+    return anonymized_text
 
 @time_it
 def add_row_values(df, columns):
@@ -486,9 +502,8 @@ if __name__ == "__main__":
         data = add_row_values(data, columns_to_sum)
 
         data = word_count(data)  # word count
-        data = anonymize(data, surnames_to_find)
         data = textblob_sentiment(data)
-
+        data['free_text'] = data['free_text'].apply(anonymize_names_with_transformers)
         data = feedback_classification(data, batch_size=16)
 
         concat_save_final_df(processed_data, data)
