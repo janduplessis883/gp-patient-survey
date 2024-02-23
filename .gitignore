@@ -132,7 +132,7 @@ dmypy.json
 .env
 
 # Date Folder
-data/
+
 secret/
 
 # MacOS files
