@@ -131,13 +131,13 @@ if page == "Survey Outcome":
             description=f"2.9% op practice list size.",
             key="total2",
         )
-
-        order1 = [
-            "Very easy",
-            "Fairly easy",
-            "Not very easy",
-            "Not at all easy",
-        ]
+    st.markdown("---")
+    order1 = [
+        "Very easy",
+        "Fairly easy",
+        "Not very easy",
+        "Not at all easy",
+    ]
 
     palette1 = {
         "Very easy": "#204e82",
