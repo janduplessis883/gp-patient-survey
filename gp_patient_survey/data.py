@@ -94,8 +94,14 @@ def convert_other(df, column_name):
     df[column_name] = df[column_name].map(mapping3)
     return df
 
+
 # Load a pre-trained NER pipeline
-ner_pipeline = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english", aggregation_strategy="simple")
+ner_pipeline = pipeline(
+    "ner",
+    model="dbmdz/bert-large-cased-finetuned-conll03-english",
+    aggregation_strategy="simple",
+)
+
 
 # Function to anonymize names in text
 @time_it
@@ -106,10 +112,11 @@ def anonymize_names_with_transformers(text):
     # Iterate over detected entities
     for entity in entities:
         # Check if the entity is a person
-        if entity['entity_group'] == 'PER':
+        if entity["entity_group"] == "PER":
             # Replace the detected name with [PERSON]
-            anonymized_text = anonymized_text.replace(entity['word'], '[PERSON]')
+            anonymized_text = anonymized_text.replace(entity["word"], "[PERSON]")
     return anonymized_text
+
 
 @time_it
 def add_row_values(df, columns):
@@ -145,82 +152,6 @@ def text_classification(data):
     data["classif_scores"] = classif_scores
 
     return data
-
-
-surnames_to_find = [
-    "Mark",
-    "Sweeney",
-    "Katherine",
-    "Brunton",
-    "Bi",
-    "Sapuay",
-    "Rebecca",
-    "Goldschmidt",
-    "Azhar",
-    "Janmohamed",
-    "Rebecca",
-    "Hayes",
-    "Shafia",
-    "Hakeem",
-    "Joshua",
-    "Martin",
-    "Aman",
-    "Hargandewal",
-    "Zein",
-    "Toukan",
-    "Huw",
-    "D'Costa",
-    "Elizabeth",
-    "O'Connor",
-    "Mary",
-    "McMahon",
-    "Moriam",
-    "Rahaman",
-    "Tim",
-    "Rees",
-    "Fiona",
-    "Butler",
-    "Shabeena",
-    "Aziz",
-    "Harriet",
-    "Wright",
-    "Anna",
-    "Grimstone",
-    "Nina",
-    "Brunker",
-    "Naila",
-    "Aslam",
-    "Rachel",
-    "Wilson",
-    "Eleanor",
-    "Titley",
-    "Khushhal",
-    "Safi",
-    "Rowena",
-    "Caballero",
-    "Rubeena",
-    "Ismail",
-    "Charlette",
-    "Lok",
-    "Anastasia",
-    "Baker",
-    "Kimiko",
-    "Hoban",
-    "Debbie",
-    "Gallon",
-    "Ahmed",
-    "Rizk",
-    "Maria",
-    "Pankhurst",
-    "Caroline",
-    "Stott",
-    "Emily",
-    "Baker",
-    "Rosanna",
-    "Younger",
-    "Imogen",
-    "Yates",
-]
 
 
 # Function to replace surnames in text
@@ -481,7 +412,6 @@ if __name__ == "__main__":
 
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
-    print(raw_data)
 
     # Load local data.csv to dataframe
     processed_data = load_local_data()
@@ -503,7 +433,7 @@ if __name__ == "__main__":
 
         data = word_count(data)  # word count
         data = textblob_sentiment(data)
-        data['free_text'] = data['free_text'].apply(anonymize_names_with_transformers)
+        data["free_text"] = data["free_text"].apply(anonymize_names_with_transformers)
         data = feedback_classification(data, batch_size=16)
 
         concat_save_final_df(processed_data, data)

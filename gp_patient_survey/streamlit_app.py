@@ -48,17 +48,20 @@ def load_data():
 
 data = load_data()
 surgery_data = [
-    {"surgery": "Earls Court Medical Centre", "list_size": 0},
-    {"surgery": "Earls Court Surgery", "list_size": 4129},
-    {"surgery": "Emperor's Gate Health Centre", "list_size": 0},
-    {"surgery": "Health Partners at Violet Melchett", "list_size": 0},
-    {"surgery": "Knightsbridge Medical Centre", "list_size": 0},
-    {"surgery": "Royal Hospital Chelsea", "list_size": 0},
-    {"surgery": "Scarsdale Medical Centre", "list_size": 0},
-    {"surgery": "Stanhope Mews Surgery", "list_size": 0},
-    {"surgery": "The Abingdon Medical Practice", "list_size": 0},
-    {"surgery": "The Chelsea Practice", "list_size": 0},
-    {"surgery": "The Good Practice", "list_size": 0},
+    {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
+    {"surgery": "Earls Court Surgery", "list_size": 4129, "prev_survey": 113},
+    {"surgery": "Emperor's Gate Health Centre", "list_size": 6909, "prev_survey": 103},
+    {
+        "surgery": "Health Partners at Violet Melchett",
+        "list_size": 8000,
+        "prev_survey": 103,
+    },
+    {"surgery": "Knightsbridge Medical Centre", "list_size": 17495, "prev_survey": 127},
+    {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 110},
+    {"surgery": "Stanhope Mews Surgery", "list_size": 16277, "prev_survey": 194},
+    {"surgery": "The Abingdon Medical Practice", "list_size": 8855, "prev_survey": 113},
+    {"surgery": "The Chelsea Practice", "list_size": 6270, "prev_survey": 122},
+    {"surgery": "The Good Practice", "list_size": 8029, "prev_survey": 105},
 ]
 
 
@@ -80,6 +83,19 @@ selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
 surgery_data = get_surgery_data(data, selected_surgery)
 # list_size = next((surgery["list_size"] for surgery in surgery_data if surgery["surgery"] == selected_surgery), None)
 st.sidebar.container(height=5, border=0)
+
+prev_survey = None
+list_size = None
+
+# Loop through each item in the list
+for surgery in surgery_data:
+    # Check if the surgery name matches "Earls Court Surgery"
+    if surgery["surgery"] == selected_surgery:
+        # If a match is found, retrieve the prev_survey value
+        prev_survey = surgery["prev_survey"]
+        list_size = surgery["list_size"]
+        break  # Exit the loop once the match is found
+
 
 page = st.sidebar.radio(
     "Choose a Page",
@@ -122,14 +138,14 @@ if page == "Survey Outcome":
         ui.metric_card(
             title="2024 PCN Survey - Total Responses",
             content=f"{surgery_data.shape[0]}",
-            description=f"{round(surgery_data.shape[0]/4129*100, 2)}% op practice list size.",
+            description=f"{round(surgery_data.shape[0]/list_size*100, 2)}% op practice list size.",
             key="total",
         )
     with cols[1]:
         ui.metric_card(
             title="2023 National GP Pt Survey Responses",
             content=f"116",
-            description=f"2.9% op practice list size.",
+            description=f"{round(prev_survey/list_size*100, 2)}% op practice list size.",
             key="total2",
         )
     st.markdown("---")
@@ -281,8 +297,8 @@ if page == "Survey Outcome":
     )
 
     counts = surgery_data["overall_experience"].value_counts()
-    to_count1 = counts["Very good"]
-    to_count2 = counts["Fairly good"]
+    to_count1 = counts.get(["Very good"], 0)
+    to_count2 = counts.get(["Fairly good"], 0)
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their overall experience of this GP practice as good.]"
     )
