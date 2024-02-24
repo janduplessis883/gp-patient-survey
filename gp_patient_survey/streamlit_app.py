@@ -51,7 +51,11 @@ surgery_data = [
     {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
     {"surgery": "Earls Court Surgery", "list_size": 4129, "prev_survey": 113},
     {"surgery": "Emperor's Gate Health Centre", "list_size": 6909, "prev_survey": 103},
-    {"surgery": "Health Partners at Violet Melchett", "list_size": 8000, "prev_survey": 103},
+    {
+        "surgery": "Health Partners at Violet Melchett",
+        "list_size": 8000,
+        "prev_survey": 103,
+    },
     {"surgery": "Knightsbridge Medical Centre", "list_size": 17495, "prev_survey": 127},
     {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 110},
     {"surgery": "Stanhope Mews Surgery", "list_size": 16277, "prev_survey": 194},
@@ -280,8 +284,8 @@ if page == "Survey Outcome":
     )
 
     counts = surgery_data["overall_experience"].value_counts()
-    to_count1 = counts.get(["Very good"], 0)
-    to_count2 = counts.get(["Fairly good"], 0)
+    to_count1 = counts["Very good"]
+    to_count2 = counts["Fairly good"]
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their overall experience of this GP practice as good.]"
     )
