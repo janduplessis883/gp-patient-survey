@@ -46,6 +46,8 @@ def load_data():
     return df
 
 
+surgery = ["Earls Court Medical Centre", "Earls Court Surgery",]
+
 data = load_data()
 surgery_data = [
     {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
