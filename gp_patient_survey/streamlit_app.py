@@ -46,7 +46,10 @@ def load_data():
     return df
 
 
-surgery = ["Earls Court Medical Centre", "Earls Court Surgery",]
+surgery = [
+    "Earls Court Medical Centre",
+    "Earls Court Surgery",
+]
 
 data = load_data()
 surgery_data = [
@@ -484,7 +487,17 @@ elif page == "About":
     # )
 
     st.markdown("""Brompton Health PCN - GP Patient Survey""")
-
+    fig, ax = plt.subplots(figsize=(10, 4))
+    sns.countplot(y="surgery", data=data, color="#536570")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    plt.xlabel("Count")
+    plt.ylabel("")
+    plt.tight_layout()
+    st.pyplot(plt)
     st.markdown("---")
 
     col1, col2, col3 = st.columns(3)
