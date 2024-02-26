@@ -58,7 +58,7 @@ surgery_data = [
         "prev_survey": 103,
     },
     {"surgery": "Knightsbridge Medical Centre", "list_size": 17495, "prev_survey": 127},
-    {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 110},
+    {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 100},
     {"surgery": "Stanhope Mews Surgery", "list_size": 16277, "prev_survey": 194},
     {"surgery": "The Abingdon Medical Practice", "list_size": 8855, "prev_survey": 113},
     {"surgery": "The Chelsea Practice", "list_size": 6270, "prev_survey": 122},
