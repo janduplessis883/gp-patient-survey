@@ -46,12 +46,8 @@ def load_data():
     return df
 
 
-surgery = [
-    "Earls Court Medical Centre",
-    "Earls Court Surgery",
-]
-
 data = load_data()
+
 surgery_data = [
     {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
     {"surgery": "Earls Court Surgery", "list_size": 4129, "prev_survey": 113},
@@ -67,7 +63,10 @@ surgery_data = [
     {"surgery": "The Abingdon Medical Practice", "list_size": 8855, "prev_survey": 113},
     {"surgery": "The Chelsea Practice", "list_size": 6270, "prev_survey": 122},
     {"surgery": "The Good Practice", "list_size": 8029, "prev_survey": 105},
+    {"surgery": "Scarsdale Medical Centre", "list_size": 8980, "prev_survey": 101},
 ]
+# Convert the list of dictionaries into a DataFrame
+df = pd.DataFrame(surgery_data)
 
 
 @st.cache_data(ttl=100)  # This decorator enables caching for this function
@@ -125,19 +124,23 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 if page == "Survey Outcome":
     st.header(f"{selected_surgery}")
 
+    list_size = df.loc[df["surgery"] == selected_surgery, "list_size"].values[0]
+    prev_survey = df.loc[df["surgery"] == selected_surgery, "prev_survey"].values[0]
+    st.markdown(f"List size: `{list_size}`")
+
     cols = st.columns(2)
     with cols[0]:
         ui.metric_card(
-            title="2024 PCN Survey - Total Responses",
+            title="2024 PCN Patient Survey - Responses",
             content=f"{surgery_data.shape[0]}",
-            description=f"{round(surgery_data.shape[0]/4129*100, 2)}% op practice list size.",
+            description=f"{round(surgery_data.shape[0]/list_size*100, 2)}% op practice list size.",
             key="total",
         )
     with cols[1]:
         ui.metric_card(
-            title="2023 National GP Pt Survey Responses",
-            content=f"116",
-            description=f"2.9% op practice list size.",
+            title="2023 NHS GP Patient Survey - Responses",
+            content=f"{prev_survey}",
+            description=f"{round(prev_survey/list_size*100, 2)}% op practice list size.",
             key="total2",
         )
     st.markdown("---")
@@ -489,6 +492,19 @@ elif page == "About":
     st.markdown("""Brompton Health PCN - GP Patient Survey""")
     fig, ax = plt.subplots(figsize=(10, 4))
     sns.countplot(y="surgery", data=data, color="#536570")
+    for p in ax.patches:
+        width = p.get_width()
+        try:
+            y = p.get_y() + p.get_height() / 2
+            ax.text(
+                width + 1,
+                y,
+                f"{int(width)}",
+                va="center",
+                fontsize=8,
+            )
+        except ValueError:
+            pass
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
