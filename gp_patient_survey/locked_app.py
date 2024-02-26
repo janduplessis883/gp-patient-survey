@@ -19,7 +19,7 @@ from utils import *
 contiguity_api = os.getenv("CONTIGUITY_API")
 client = contiguity.login(contiguity_api)
 
-st.set_page_config(page_title="AI MedReview: GP Patient Survey")
+st.set_page_config(page_title="Brompton Health PCN: GP Patient Survey 2024")
 
 html2 = """
     <style>
