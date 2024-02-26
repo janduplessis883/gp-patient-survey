@@ -15,7 +15,7 @@ client = OpenAI()
 
 from utils import *
 
-st.set_page_config(page_title="AI MedReview: GP Patient Survey")
+st.set_page_config(page_title="Brompton Health PCN: GP Patient Survey 2024")
 
 
 html = """
