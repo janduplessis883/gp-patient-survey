@@ -56,3 +56,4 @@ ollama
 skimpy
 streamlit-shadcn-ui  
 loguru
+contiguity

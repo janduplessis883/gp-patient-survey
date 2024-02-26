@@ -17,6 +17,7 @@ from utils import *
 
 st.set_page_config(page_title="AI MedReview: GP Patient Survey")
 
+
 html = """
 <style>
 .gradient-text {
