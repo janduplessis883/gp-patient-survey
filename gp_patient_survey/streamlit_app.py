@@ -133,14 +133,14 @@ if page == "Survey Outcome":
         ui.metric_card(
             title="2024 PCN Patient Survey - Responses",
             content=f"{surgery_data.shape[0]}",
-            description=f"{round(surgery_data.shape[0]/list_size*100, 2)}% op practice list size.",
+            description=f"{round(surgery_data.shape[0]/list_size*100, 2)}% of practice list size.",
             key="total",
         )
     with cols[1]:
         ui.metric_card(
             title="2023 NHS GP Patient Survey - Responses",
             content=f"{prev_survey}",
-            description=f"{round(prev_survey/list_size*100, 2)}% op practice list size.",
+            description=f"{round(prev_survey/list_size*100, 2)}% of practice list size.",
             key="total2",
         )
     st.markdown("---")
