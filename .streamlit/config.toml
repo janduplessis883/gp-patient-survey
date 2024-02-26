@@ -20,3 +20,6 @@ font = "sans serif"
 
 [deprecation]
 showPyplotGlobalUse = false
+
+[server] 
+enableStaticServing = true
