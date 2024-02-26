@@ -36,7 +36,7 @@ html = """
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
-st.sidebar.image("gp_patient_survey/images/gps.png")
+st.sidebar.image("images/gps.png")
 
 
 @st.cache_data(ttl=100)
@@ -532,7 +532,7 @@ elif page == "About":
     with col3:
 
         st.image(
-            "gp_patient_survey/images/openai.png",
+            "images/openai.png",
             width=200,
         )
 
