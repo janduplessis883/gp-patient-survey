@@ -516,8 +516,6 @@ elif page == "About":
     st.pyplot(plt)
     st.markdown("---")
 
-    st.write("Current directory:", os.getcwd())
-
     col1, col2, col3 = st.columns(3)
 
     # Use 'col1' to display content in the first column
@@ -602,6 +600,4 @@ elif page == "GPT4 Summary":
                 key="badges10",
             )
     else:
-        st.image(
-            "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/unnamed.jpg?raw=true"
-        )
+        st.image("images/openailogo.png")
