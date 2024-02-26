@@ -10,6 +10,7 @@ import time
 from openai import OpenAI
 import streamlit_shadcn_ui as ui
 import os
+from PIL import Image
 
 client = OpenAI()
 
@@ -35,9 +36,7 @@ html = """
 # Using the markdown function with HTML to center the text
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
-st.sidebar.image(
-    "https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps.png?raw=true"
-)
+st.sidebar.image("gp_patient_survey/images/gps.png")
 
 
 @st.cache_data(ttl=100)
@@ -517,24 +516,23 @@ elif page == "About":
     st.pyplot(plt)
     st.markdown("---")
 
+    st.write("Current directory:", os.getcwd())
+
     col1, col2, col3 = st.columns(3)
 
     # Use 'col1' to display content in the first column
     with col1:
-        st.image(
-            "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/about.png?raw=true",
-            width=200,
-        )
+        about = Image.open("gp_patient_survey/images/about.png")
+        st.image(about)
 
     # Use 'col2' to display content in the second column
     with col2:
-        st.image(
-            "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/hf-logo-with-title.png?raw=true",
-            width=200,
-        )
+        hf = Image.open("gp_patient_survey/images/hf-logo-with-title.png")
+        st.image(hf)
     with col3:
+
         st.image(
-            "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/openai.png?raw=true",
+            "gp_patient_survey/images/openai.png",
             width=200,
         )
 
