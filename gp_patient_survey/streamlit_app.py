@@ -35,7 +35,7 @@ html = """
 st.sidebar.markdown(html, unsafe_allow_html=True)
 
 st.sidebar.image(
-    "https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps2.png?raw=true"
+    "https://github.com/janduplessis883/gp-patient-survey/blob/master/images/gps.png?raw=true"
 )
 
 
