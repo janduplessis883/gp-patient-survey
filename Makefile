@@ -17,6 +17,9 @@ all: install clean
 data:
 	@python gp_patient_survey/data.py
 
+repeat:
+	@python gp_patient_survey/scheduler.py
+
 app:
 	@streamlit run gp_patient_survey/streamlit_app.py
 
