@@ -22,9 +22,8 @@ warnings.filterwarnings("ignore")
 secret_path = os.getenv("SECRET_PATH")
 from sheethelper import *
 import cronitor
-
 cronitor.api_key = os.getenv("CRONITOR_API_KEY")
-monitor = cronitor.Monitor("AsmpQK")
+
 
 
 @time_it
@@ -413,6 +412,7 @@ def load_local_data():
 
 if __name__ == "__main__":
     print(f"{Fore.WHITE}{Back.BLACK}[+] GP Patient Survey - MAKE DATA")
+    monitor = cronitor.Monitor('AsmpQK')
     monitor.ping(state="run")
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
