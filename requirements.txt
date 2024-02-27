@@ -57,3 +57,4 @@ skimpy
 streamlit-shadcn-ui  
 loguru
 contiguity
+cronitor

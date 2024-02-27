@@ -21,6 +21,10 @@ init(autoreset=True)
 warnings.filterwarnings("ignore")
 secret_path = os.getenv("SECRET_PATH")
 from sheethelper import *
+import cronitor
+
+cronitor.api_key = os.getenv("CRONITOR_API_KEY")
+monitor = cronitor.Monitor("AsmpQK")
 
 
 @time_it
@@ -409,7 +413,7 @@ def load_local_data():
 
 if __name__ == "__main__":
     print(f"{Fore.WHITE}{Back.BLACK}[+] GP Patient Survey - MAKE DATA")
-
+    monitor.ping(state="run")
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
 
@@ -438,5 +442,7 @@ if __name__ == "__main__":
 
         concat_save_final_df(processed_data, data)
         do_git_merge()  # Push everything to GitHub
+        monitor.ping(state="complete")
     else:
         print(f"{Fore.RED}[*] No New rows to add - terminated.")
+        monitor.ping(state="complete")
