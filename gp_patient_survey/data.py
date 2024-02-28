@@ -10,7 +10,8 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipe
 import pandas as pd
 from textblob import TextBlob
 from nltk.sentiment import SentimentIntensityAnalyzer
-
+from loguru import logger
+logger.add("log/debug.log", rotation="500 KB")
 
 from gp_patient_survey.params import *
 from gp_patient_survey.utils import *
@@ -411,19 +412,21 @@ def load_local_data():
 
 
 if __name__ == "__main__":
-    print(f"{Fore.WHITE}{Back.BLACK}[+] GP Patient Survey - MAKE DATA")
+    logger.info("▶️ GP Patient Survey - MAKE DATA - Started")
     monitor = cronitor.Monitor('AsmpQK')
     monitor.ping(state="run")
     # Load new data from Google Sheet
     raw_data = load_google_sheet()
-
+    logger.info("Google Sheet Data Loaded")
+    
     # Load local data.csv to dataframe
     processed_data = load_local_data()
-
+    logger.info("Data.csv Loadded")
+    
     # Return new data for processing
     data = raw_data[~raw_data.index.isin(processed_data.index)]
-
-    print(f"{Fore.BLUE}[*] New rows to process: {data.shape[0]}")
+    logger.info(f"🆕 New rows to process: {data.shape[0]}")
+    
     if data.shape[0] != 0:
 
         columns_to_sum = [
@@ -439,10 +442,17 @@ if __name__ == "__main__":
         data = textblob_sentiment(data)
         data["free_text"] = data["free_text"].apply(anonymize_names_with_transformers)
         data = feedback_classification(data, batch_size=16)
-
+        logger.info("Data pre-processing completed")
+        
         concat_save_final_df(processed_data, data)
+        logger.info("💾 Concat Dataframes to data.csv successfully")
+        
         do_git_merge()  # Push everything to GitHub
+        logger.info("Pushed to GitHub - Master Branch")
+        
         monitor.ping(state="complete")
+        logger.info("✅ Successful Run completed")
     else:
         print(f"{Fore.RED}[*] No New rows to add - terminated.")
         monitor.ping(state="complete")
+        logger.error("❌ Make Data terminated - No now rows")
