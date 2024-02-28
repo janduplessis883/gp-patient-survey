@@ -14,7 +14,7 @@ while True:
     for remaining in range(wait_time, 0, -1):
         sys.stdout.write("\r")
         # Setting the color to bold red for the countdown
-        countdown_message = "{0}{1}{2} seconds remaining.".format(Fore.RED + Style.BRIGHT, remaining, Style.RESET_ALL)
+        countdown_message = "{0}{1}{2} seconds remaining - GP Patient Survey 2024".format(Fore.RED + Style.BRIGHT, remaining, Style.RESET_ALL)
         sys.stdout.write(countdown_message)
         sys.stdout.flush()
         time.sleep(1)
