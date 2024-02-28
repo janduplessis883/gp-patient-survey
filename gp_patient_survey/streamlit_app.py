@@ -488,7 +488,21 @@ elif page == "About":
     #     use_column_width=True,
     # )
 
-    st.markdown("""Brompton Health PCN - GP Patient Survey""")
+    st.markdown(
+        """**Welcome to the Brompton Health GP Patient Survey 2024 Dashboard!**
+
+We're thrilled to have you here! At Brompton Health, we're committed to understanding and enhancing our patients' experiences. Recognizing that the response rate to the National GP Patient Survey in 2023 was notably low, we've taken a proactive step to gather more meaningful and reliable feedback directly from you, our valued patients.
+
+This year, we've introduced an innovative approach by deploying an electronic form to delve into your experiences and opinions. We're focusing on five critical questions that truly matter to our service quality and patient satisfaction. Your insights are invaluable, and we're excited to see how this new method enriches our understanding of your needs and expectations.
+
+Your feedback is not just a drop in the ocean! The insights we gather will be meticulously analyzed and submitted to the Integrated Care Board (ICB) for review. This process ensures that your voice is heard and contributes significantly to shaping the healthcare services at Brompton Health.
+
+We invite you to explore the dashboard, view the collected feedback, and see how your contributions make a difference. Together, we're not just improving healthcare services; we're enhancing our community's well-being.
+
+Thank you for being an integral part of this journey. Your health, your voice, and your experience matter to us!"""
+    )
+    st.write("")
+    st.write("")
     fig, ax = plt.subplots(figsize=(10, 4))
     sns.countplot(y="surgery", data=data, color="#536570")
     for p in ax.patches:
