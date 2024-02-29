@@ -389,7 +389,7 @@ elif page == "Sentiment Analysis":
 
 # == Feedback Classification ========================================================================================
 elif page == "Feedback Classification":
-    st.subheader("Feedback Classification")
+    st.title("Feedback Classification")
 
     toggle = ui.switch(
         default_checked=False, label="Explain this page.", key="switch_dash"
@@ -490,7 +490,7 @@ Rows are labeled with an Index, which you can think of as the address of the dat
 
 # == About ==========================================================
 elif page == "About":
-    st.subheader("About")
+    st.title("About")
     # st.image(
     #     "https://github.com/janduplessis883/friends-and-family-test-analysis/blob/master/images/fftestabout.png?raw=true",
     #     use_column_width=True,
@@ -558,7 +558,7 @@ Thank you for being an integral part of this journey. Your health, your voice, a
 
 # == Generate ChatGPT Summaries ==========================================================
 elif page == "GPT4 Summary":
-    st.subheader("GPT4 Feedback Summary")
+    st.title("GPT4 Feedback Summary")
 
     series = pd.Series(surgery_data["free_text"])
     series.dropna(inplace=True)
