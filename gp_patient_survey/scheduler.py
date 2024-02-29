@@ -5,7 +5,7 @@ from colorama import Fore, Style, init
 
 init()  # Initializes Colorama
 
-wait_time = 7200  # 2 hours
+wait_time = 60*30  
 
 while True:
     subprocess.run(["python", "gp_patient_survey/data.py"])
