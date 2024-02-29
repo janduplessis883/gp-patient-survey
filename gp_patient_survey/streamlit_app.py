@@ -126,7 +126,7 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 
 # == DASHBOARD ==========================================================================================================
 if page == "Practice Outcomes":
-    st.header(f"{selected_surgery}")
+    st.title(f"{selected_surgery}")
 
     list_size = df.loc[df["surgery"] == selected_surgery, "list_size"].values[0]
     prev_survey = df.loc[df["surgery"] == selected_surgery, "prev_survey"].values[0]
