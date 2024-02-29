@@ -354,7 +354,7 @@ if page == "Practice Outcomes":
 
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
-    st.subheader("Free-Text Feedback Sentiment Analysis")
+    st.title("Free-Text Feedback Sentiment Analysis")
     st.container(height=15, border=False)
     filtered_data = surgery_data[pd.notna(surgery_data["free_text"])]
 
@@ -470,7 +470,7 @@ Below the chart is a multi-select field where you can choose to filter and revie
 
 # == Dataframe ==========================================================
 elif page == "View Dataframe":
-    st.subheader("Dataframe")
+    st.title("Dataframe")
     toggle = ui.switch(
         default_checked=False, label="Explain this page.", key="switch_dash"
     )
@@ -559,7 +559,9 @@ Thank you for being an integral part of this journey. Your health, your voice, a
 # == Generate ChatGPT Summaries ==========================================================
 elif page == "GPT4 Summary":
     st.title("GPT4 Feedback Summary")
-
+    st.markdown(
+        "Press the button below to create a summary with GPT-4 of all received free text responses, highlighting key trends."
+    )
     series = pd.Series(surgery_data["free_text"])
     series.dropna(inplace=True)
     word_series = series.to_list()
