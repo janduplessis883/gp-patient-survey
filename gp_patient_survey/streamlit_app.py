@@ -74,6 +74,21 @@ def get_surgery_data(data, selected_surgery):
     return surgery_data
 
 
+
+
+page = st.sidebar.radio(
+    "Choose a Page",
+    [
+        "Survey Summary",
+        "Practice Outcomes",
+        "Feedback Classification",
+        "Sentiment Analysis",
+        "GPT4 Summary",
+        "View Dataframe",
+        "About",
+    ],
+)
+
 surgery_list = data["surgery"].unique()
 surgery_list.sort()
 selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
@@ -83,17 +98,6 @@ surgery_data = get_surgery_data(data, selected_surgery)
 # list_size = next((surgery["list_size"] for surgery in surgery_data if surgery["surgery"] == selected_surgery), None)
 st.sidebar.container(height=5, border=0)
 
-page = st.sidebar.radio(
-    "Choose a Page",
-    [
-        "Survey Outcome",
-        "Feedback Classification",
-        "Sentiment Analysis",
-        "GPT4 Summary",
-        "View Dataframe",
-        "About",
-    ],
-)
 st.sidebar.container(height=200, border=0)
 
 
@@ -116,7 +120,7 @@ st.sidebar.markdown(centered_html, unsafe_allow_html=True)
 
 
 # == DASHBOARD ==========================================================================================================
-if page == "Survey Outcome":
+if page == "Practice Outcomes":
     st.header(f"{selected_surgery}")
 
     list_size = df.loc[df["surgery"] == selected_surgery, "list_size"].values[0]
@@ -610,3 +614,8 @@ elif page == "GPT4 Summary":
             )
     else:
         st.image("images/openailogo.png")
+
+
+# == Overview ==========================================================
+elif page == "Survey Summary":
+    st.title("Survey Sumamry")
