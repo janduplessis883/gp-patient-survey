@@ -171,7 +171,7 @@ if page == "Practice Outcomes":
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** find it easy to get through to this GP practice by phone] "
     )
-    st.markdown(":grey[ICS result: 59% National result: 50%]")
+    st.markdown(":grey[ICS result: 59% / National result: 50%]")
 
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(y=surgery_data["phone"], ax=ax, order=order1, palette=palette1)
@@ -219,7 +219,7 @@ if page == "Practice Outcomes":
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** are satisfied with the general practice appointment times available.] "
     )
-    st.markdown(":grey[ICS result: 57% National result: 53%]")
+    st.markdown(":grey[ICS result: 57% / National result: 53%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["appointment_time"], ax=ax, order=order3, palette=palette3
@@ -268,7 +268,7 @@ if page == "Practice Outcomes":
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their experience of making an appointment as good.] "
     )
-    st.markdown(":grey[ICS result: 57% National result: 54%]")
+    st.markdown(":grey[ICS result: 57% / National result: 54%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["making_appointment"], ax=ax, order=order, palette=palette
@@ -301,7 +301,7 @@ if page == "Practice Outcomes":
     st.markdown(
         f":orange[**{round((to_count1 + to_count2)/surgery_data.shape[0]*100, 2)}%** describe their overall experience of this GP practice as good.]"
     )
-    st.markdown(":grey[ICS result: 70% National result: 71%]")
+    st.markdown(":grey[ICS result: 70% / National result: 71%]")
     fig, ax = plt.subplots(figsize=(12, 4))  # Width=12, Height=4
     sns.countplot(
         y=surgery_data["overall_experience"], ax=ax, order=order, palette=palette
