@@ -51,18 +51,14 @@ surgery_data = [
     {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
     {"surgery": "Earls Court Surgery", "list_size": 4129, "prev_survey": 113},
     {"surgery": "Emperor's Gate Health Centre", "list_size": 6909, "prev_survey": 103},
-    {
-        "surgery": "Health Partners at Violet Melchett",
-        "list_size": 8000,
-        "prev_survey": 103,
-    },
-    {"surgery": "Knightsbridge Medical Centre", "list_size": 17495, "prev_survey": 127},
+    {"surgery": "Health Partners at Violet Melchett", "list_size": 10153, "prev_survey": 103},
+    {"surgery": "Knightsbridge Medical Centre", "list_size": 15370, "prev_survey": 127},
     {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 100},
     {"surgery": "Stanhope Mews Surgery", "list_size": 16277, "prev_survey": 194},
-    {"surgery": "The Abingdon Medical Practice", "list_size": 8855, "prev_survey": 113},
-    {"surgery": "The Chelsea Practice", "list_size": 6270, "prev_survey": 122},
+    {"surgery": "The Abingdon Medical Practice", "list_size": 8707, "prev_survey": 113},
+    {"surgery": "The Chelsea Practice", "list_size": 6533, "prev_survey": 122},
     {"surgery": "The Good Practice", "list_size": 8029, "prev_survey": 105},
-    {"surgery": "Scarsdale Medical Centre", "list_size": 8980, "prev_survey": 101},
+    {"surgery": "Scarsdale Medical Centre", "list_size": 7949, "prev_survey": 101},
 ]
 # Convert the list of dictionaries into a DataFrame
 df = pd.DataFrame(surgery_data)
