@@ -354,7 +354,8 @@ if page == "Practice Outcomes":
 
 # == Rating & Sentiment Analysis Correlation ======================================================================
 elif page == "Sentiment Analysis":
-    st.title("Free-Text Feedback Sentiment Analysis")
+    st.title("Free-Text Sentiment Analysis")
+    st.write(selected_surgery)
     st.container(height=15, border=False)
     filtered_data = surgery_data[pd.notna(surgery_data["free_text"])]
 
