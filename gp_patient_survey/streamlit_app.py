@@ -51,7 +51,11 @@ surgery_data = [
     {"surgery": "Earls Court Medical Centre", "list_size": 6817, "prev_survey": 103},
     {"surgery": "Earls Court Surgery", "list_size": 4129, "prev_survey": 113},
     {"surgery": "Emperor's Gate Health Centre", "list_size": 6909, "prev_survey": 103},
-    {"surgery": "Health Partners at Violet Melchett", "list_size": 10153, "prev_survey": 103},
+    {
+        "surgery": "Health Partners at Violet Melchett",
+        "list_size": 10153,
+        "prev_survey": 103,
+    },
     {"surgery": "Knightsbridge Medical Centre", "list_size": 15370, "prev_survey": 127},
     {"surgery": "Royal Hospital Chelsea", "list_size": 250, "prev_survey": 100},
     {"surgery": "Stanhope Mews Surgery", "list_size": 16277, "prev_survey": 194},
@@ -97,7 +101,6 @@ if page not in ["Survey Summary", "About"]:
 
     # Call the function with the selected surgery
     surgery_data = get_surgery_data(data, selected_surgery)
-    
 
 
 st.sidebar.container(height=200, border=0)
@@ -355,30 +358,33 @@ elif page == "Sentiment Analysis":
     st.container(height=15, border=False)
     filtered_data = surgery_data[pd.notna(surgery_data["free_text"])]
 
-    # Data for plotting
-    labels = "Positive", "Neutral", "Negative"
-    sizes = sentiment_totals(filtered_data)
-    colors = ["#6b899f", "#f0e8d2", "#ae4f4d"]
-    explode = (0, 0, 0)  # 'explode' the 1st slice (Positive)
+    try:
+        # Data for plotting
+        labels = "Positive", "Neutral", "Negative"
+        sizes = sentiment_totals(filtered_data)
+        colors = ["#6b899f", "#f0e8d2", "#ae4f4d"]
+        explode = (0, 0, 0)  # 'explode' a slice if needed
 
-    # Plot
-    fig, ax = plt.subplots(figsize=(12, 5))
-    ax.pie(
-        sizes,
-        explode=explode,
-        labels=labels,
-        colors=colors,
-        autopct="%1.1f%%",
-        startangle=140,
-    )
-    ax.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
+        # Plot
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.pie(
+            sizes,
+            explode=explode,
+            labels=labels,
+            colors=colors,
+            autopct="%1.1f%%",
+            startangle=140,
+        )
+        ax.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
 
-    # Draw a circle at the center of pie to make it look like a donut
-    centre_circle = plt.Circle((0, 0), 0.50, fc="white")
-    fig.gca().add_artist(centre_circle)
+        # Draw a circle at the center of pie to make it look like a donut
+        centre_circle = plt.Circle((0, 0), 0.50, fc="white")
+        fig.gca().add_artist(centre_circle)
 
-    plt.title("Cumulative Sentiment Analysis Overview")
-    st.pyplot(fig)
+        st.pyplot(fig)
+
+    except ZeroDivisionError:
+        st.warning("Not enough data to perform Sentiment Analysis.")
 
 
 # == Feedback Classification ========================================================================================
@@ -622,69 +628,82 @@ elif page == "GPT4 Summary":
 elif page == "Survey Summary":
     st.title("Survey Summary")
     st.write("")
-    st.markdown("""**Brompton Health PCN** Surgeries did a Patient Survey with five questions from the National GP Patient Survey 2023, to evaluate outcomes. The five questions asked were:  
+    st.markdown(
+        """**Brompton Health PCN** conducted a patient survey, incorporating five questions from the 2023 National GP Patient Survey. The objective was to evaluate the performance outcomes of the surgeries within the network. The survey focused on the following areas:
                 
     Q1: (phone) Generally, how easy is it to get through to someone at your GP practice on the phone?  
     Q2: (appointment-time) How satisfied are you with the general practice appointment times that are available to you?  
     Q3: (making-appointment) Overall, how would you describe your experience of making an appointment?  
     Q4: (overall-experience) Overall, how would you describe your experience of your GP practice?  
-    Q5: (website) Overall, had a good experiece using the surgery website.""")
+    Q5: (website) Overall, had a good experiece using the surgery website."""
+    )
     st.markdown("---")
     response_options = {
-        'phone': ['Very easy', 'Fairly easy'],
-        'appointment_time': ['Very satisfied', 'Fairly satisfied'],
-        'making_appointment': ['Very good', 'Fairly good'],
-        'overall_experience': ['Very good', 'Fairly good'],
-        'website': ['Very good', 'Fairly good'],
+        "phone": ["Very easy", "Fairly easy"],
+        "appointment_time": ["Very satisfied", "Fairly satisfied"],
+        "making_appointment": ["Very good", "Fairly good"],
+        "overall_experience": ["Very good", "Fairly good"],
+        "website": ["Very good", "Fairly good"],
     }
-    
+
     # Calculate the percentages for each question and surgery without using aggregate function
     percentages = {}
 
     for question, responses in response_options.items():
         # Filter the data for each response option and calculate the percentage
-        percentages[question] = data.groupby('surgery')[question].apply(lambda x: (x.isin(responses).sum() / len(x)) * 100)
+        percentages[question] = data.groupby("surgery")[question].apply(
+            lambda x: (x.isin(responses).sum() / len(x)) * 100
+        )
 
     # Convert the dictionary of percentages to a DataFrame
     percentage_df = pd.DataFrame(percentages).reset_index()
 
     # Display the calculated percentages for verification
     percentage_df.head()
-    
+
     # Count the number of responses for each surgery
-    response_counts = data['surgery'].value_counts()
+    response_counts = data["surgery"].value_counts()
 
     # Identify surgeries with less than 5 responses
     surgeries_with_few_responses = response_counts[response_counts < 5].index.tolist()
 
     # Set the percentage scores to 0% for surgeries with less than 5 responses
-    percentage_df.loc[percentage_df['surgery'].isin(surgeries_with_few_responses), response_options.keys()] = 0
+    percentage_df.loc[
+        percentage_df["surgery"].isin(surgeries_with_few_responses),
+        response_options.keys(),
+    ] = 0
 
     # Display the updated dataframe with the adjustments
     percentage_df.head()
-    
+
     # Draw the updated heatmap with the adjusted percentages
     # Your existing setup for the heatmap
     plt.figure(figsize=(12, 10))
-    sns.heatmap(percentage_df.set_index('surgery'), annot=True, fmt=".1f", linewidths=.5, cmap='Blues')
+    sns.heatmap(
+        percentage_df.set_index("surgery"),
+        annot=True,
+        fmt=".1f",
+        linewidths=0.5,
+        cmap="Blues",
+    )
 
     # Set the titles and labels
-    plt.title('Heatmap of Survey Responses by Surgery', fontsize=16)
-    plt.xlabel('Survey Questions', fontsize=12)
-    plt.ylabel('Surgery', fontsize=12)
+    plt.title("Heatmap of Survey Responses by Surgery", fontsize=16)
+    plt.xlabel("Survey Questions", fontsize=12)
+    plt.ylabel("Surgery", fontsize=12)
 
     # Rotate the x-axis labels for better readability
-    plt.xticks(rotation=45, ha='right')
+    plt.xticks(rotation=45, ha="right")
 
     # Tight layout to fit everything
     plt.tight_layout()
 
     # Use Streamlit to render the plot
     st.pyplot(plt)
-    
+
     st.markdown("---")
-    st.markdown("Number of Response by Surgery:")
-    fig, ax = plt.subplots(figsize=(10, 4))
+
+    fig, ax = plt.subplots(figsize=(10, 6))
     sns.countplot(y="surgery", data=data, color="#536570")
     for p in ax.patches:
         width = p.get_width()
@@ -705,6 +724,7 @@ elif page == "Survey Summary":
     ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
     ax.yaxis.grid(False)
     plt.xlabel("Count")
+    plt.title("No of Response by Surgery")
     plt.ylabel("")
     plt.tight_layout()
     st.pyplot(plt)
