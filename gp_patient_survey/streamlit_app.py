@@ -74,7 +74,7 @@ def get_surgery_data(data, selected_surgery):
     return surgery_data
 
 
-
+st.sidebar.container(height=5, border=0)
 
 page = st.sidebar.radio(
     "Choose a Page",
@@ -89,14 +89,16 @@ page = st.sidebar.radio(
     ],
 )
 
-surgery_list = data["surgery"].unique()
-surgery_list.sort()
-selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
+# Only show the surgery selection if the selected page is not 'Survey Summary' or 'About'
+if page not in ["Survey Summary", "About"]:
+    surgery_list = data["surgery"].unique()
+    surgery_list.sort()
+    selected_surgery = st.sidebar.selectbox("Select Surgery", surgery_list)
 
-# Call the function with the selected surgery
-surgery_data = get_surgery_data(data, selected_surgery)
-# list_size = next((surgery["list_size"] for surgery in surgery_data if surgery["surgery"] == selected_surgery), None)
-st.sidebar.container(height=5, border=0)
+    # Call the function with the selected surgery
+    surgery_data = get_surgery_data(data, selected_surgery)
+    
+
 
 st.sidebar.container(height=200, border=0)
 
@@ -110,7 +112,7 @@ centered_html = """
     }
     </style>
     <div class='centered'>
-    <img alt="Static Badge" src="https://img.shields.io/badge/github-janduplessis883-%23d0ae57?logo=github&color=%23d0ae57&link=https%3A%2F%2Fgithub.com%2Fjanduplessis883%2Ffriends-and-family-test-analysis">
+    <img alt="Static Badge" src="https://img.shields.io/badge/github-janduplessis883-%2371a3bf">
     </div>
 """
 
@@ -618,4 +620,64 @@ elif page == "GPT4 Summary":
 
 # == Overview ==========================================================
 elif page == "Survey Summary":
-    st.title("Survey Sumamry")
+    st.title("Survey Summary")
+    st.write("")
+    st.markdown("""**Brompton Health PCN** Surgeries did a Patient Survey with five questions from the National GP Patient Survey 2023, to evaluate outcomes. The five questions asked were:  
+                
+    Q1: (phone) Generally, how easy is it to get through to someone at your GP practice on the phone?  
+    Q2: (appointment-time) How satisfied are you with the general practice appointment times that are available to you?  
+    Q3: (making-appointment) Overall, how would you describe your experience of making an appointment?  
+    Q4: (overall-experience) Overall, how would you describe your experience of your GP practice?  
+    Q5: (website) Overall, had a good experiece using the surgery website.""")
+    st.markdown("---")
+    response_options = {
+        'phone': ['Very easy', 'Fairly easy'],
+        'appointment_time': ['Very satisfied', 'Fairly satisfied'],
+        'making_appointment': ['Very good', 'Fairly good'],
+        'overall_experience': ['Very good', 'Fairly good'],
+        'website': ['Very good', 'Fairly good'],
+    }
+    
+    # Calculate the percentages for each question and surgery without using aggregate function
+    percentages = {}
+
+    for question, responses in response_options.items():
+        # Filter the data for each response option and calculate the percentage
+        percentages[question] = data.groupby('surgery')[question].apply(lambda x: (x.isin(responses).sum() / len(x)) * 100)
+
+    # Convert the dictionary of percentages to a DataFrame
+    percentage_df = pd.DataFrame(percentages).reset_index()
+
+    # Display the calculated percentages for verification
+    percentage_df.head()
+    
+    # Count the number of responses for each surgery
+    response_counts = data['surgery'].value_counts()
+
+    # Identify surgeries with less than 5 responses
+    surgeries_with_few_responses = response_counts[response_counts < 5].index.tolist()
+
+    # Set the percentage scores to 0% for surgeries with less than 5 responses
+    percentage_df.loc[percentage_df['surgery'].isin(surgeries_with_few_responses), response_options.keys()] = 0
+
+    # Display the updated dataframe with the adjustments
+    percentage_df.head()
+    
+    # Draw the updated heatmap with the adjusted percentages
+    # Your existing setup for the heatmap
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(percentage_df.set_index('surgery'), annot=True, fmt=".1f", linewidths=.5, cmap='Blues')
+
+    # Set the titles and labels
+    plt.title('Heatmap of Survey Responses by Surgery', fontsize=16)
+    plt.xlabel('Survey Questions', fontsize=12)
+    plt.ylabel('Surgery', fontsize=12)
+
+    # Rotate the x-axis labels for better readability
+    plt.xticks(rotation=45, ha='right')
+
+    # Tight layout to fit everything
+    plt.tight_layout()
+
+    # Use Streamlit to render the plot
+    st.pyplot(plt)
