@@ -681,3 +681,30 @@ elif page == "Survey Summary":
 
     # Use Streamlit to render the plot
     st.pyplot(plt)
+    
+    st.markdown("---")
+    st.markdown("Number of Response by Surgery:")
+    fig, ax = plt.subplots(figsize=(10, 4))
+    sns.countplot(y="surgery", data=data, color="#536570")
+    for p in ax.patches:
+        width = p.get_width()
+        try:
+            y = p.get_y() + p.get_height() / 2
+            ax.text(
+                width + 1,
+                y,
+                f"{int(width)}",
+                va="center",
+                fontsize=8,
+            )
+        except ValueError:
+            pass
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.xaxis.grid(True, linestyle="--", linewidth=0.5, color="#888888")
+    ax.yaxis.grid(False)
+    plt.xlabel("Count")
+    plt.ylabel("")
+    plt.tight_layout()
+    st.pyplot(plt)
