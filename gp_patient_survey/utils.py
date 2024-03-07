@@ -132,7 +132,7 @@ def time_it(func):
         end_time = time.time()
         elapsed_time = end_time - start_time
         func_name = func.__name__
-        logger.info(f"Function '{func_name}' took {elapsed_time:.6f} seconds to execute.")
+        logger.info(f"Function '{func_name}' ⚡️ {elapsed_time:.6f} sec")
         return result
     return wrapper
 
