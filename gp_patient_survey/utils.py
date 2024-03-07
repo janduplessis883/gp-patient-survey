@@ -134,6 +134,7 @@ def time_it(func):
         func_name = func.__name__
         logger.info(f"Function '{func_name}' ⚡️{elapsed_time:.6f} sec")
         return result
+
     return wrapper
 
 
