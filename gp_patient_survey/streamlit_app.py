@@ -87,7 +87,6 @@ page = st.sidebar.radio(
         "Practice Outcomes",
         "Feedback Classification",
         "Sentiment Analysis",
-        "GPT4 Summary",
         "View Dataframe",
         "About",
     ],
@@ -556,77 +555,6 @@ Thank you for being an integral part of this journey. Your health, your voice, a
             "images/openai.png",
             width=200,
         )
-
-
-# == Generate ChatGPT Summaries ==========================================================
-elif page == "GPT4 Summary":
-    st.title("GPT4 Feedback Summary")
-    st.markdown(f"**{selected_surgery}**")
-    st.markdown(
-        "Press the button below to create a summary with GPT-4 of all received free text responses, highlighting key trends."
-    )
-    series = pd.Series(surgery_data["free_text"])
-    series.dropna(inplace=True)
-    word_series = series.to_list()
-    text = " ".join(word_series)
-    text = replace_surname(text)
-
-    def call_chatgpt_api(text):
-        # Example OpenAI Python library request
-        completion = client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a helpful assistant. and expert at summarixing friends and family Test Feedback for a GP Surgery",
-                },
-                {"role": "user", "content": f"Summarize the follwing text\n\n{text}"},
-            ],
-        )
-
-        output = completion.choices[0].message.content
-        return output
-
-    # Text input
-    user_input = text
-
-    # Button to trigger summarization
-    if st.button("Summarize with GPT4", help="Click to start generating a summary."):
-        if user_input:
-            # Call the function to interact with ChatGPT API
-            st.markdown("### Input Text")
-            code = text
-            st.info(f"{code}")
-
-            # Initiate progress bar
-            my_bar = st.progress(0)
-
-            # Simulate a loading process
-            for percent_complete in range(100):
-                time.sleep(0.2)
-                my_bar.progress(percent_complete + 1)
-
-            summary = call_chatgpt_api(user_input)
-
-            # Hide the progress bar after completion
-            my_bar.empty()
-            st.markdown("---")
-            st.markdown("### GPT4 Feedback Summary")
-            st.markdown("`Copy GPPT4 Summary as required.`")
-            st.write(summary)
-            st.download_button(
-                "Download GPT-4 Output", summary, help="Download summary as a TXT file."
-            )
-
-        else:
-            st.write(text)
-            ui.badges(
-                badge_list=[("Not able to summarise text.", "destructive")],
-                class_name="flex gap-2",
-                key="badges10",
-            )
-    else:
-        st.image("images/openailogo.png")
 
 
 # == Overview ==========================================================
