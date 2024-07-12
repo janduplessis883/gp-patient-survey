@@ -1,59 +1,28 @@
 # Core Packages
 numpy
 pandas
-scipy
-scikit-learn
+
+
 
 # Visualization
 matplotlib
 seaborn
-yellowbrick
 
-# Jupyter
-notebook
-ipykernel
-ipywidgets
 
 # Utilities
 colorama
 pytest
 
-# Machine Learning
-# tensorflow-macos==2.10.0; sys_platform == 'darwin' and 'ARM' in platform_version
-# tensorflow==2.10.0; sys_platform == 'darwin' and 'ARM' not in platform_version
-# tensorflow==2.10.0; sys_platform != 'darwin'
-# mlflow==2.1.1
-# tpot
-# imblearn
-
-# API
-# fastapi
-# uvicorn
-# pytest-asyncio
-
-# Package specific
 
 traitlets==5.9.0
 
-# Dependancies for sheethelper
-gspread
-transformers
-python-dotenv
-openai
 wordcloud
 streamlit
-python-dotenv
 
-
-sentencepiece
-textblob
-nltk
 
 requests
 black
-setfit
-ollama
-skimpy
+
 streamlit-shadcn-ui  
 loguru
 contiguity
