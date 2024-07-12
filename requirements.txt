@@ -1,28 +1,15 @@
 # Core Packages
 numpy
 pandas
-
-
-
-# Visualization
+openai
 matplotlib
 seaborn
-
-
-# Utilities
 colorama
 pytest
-
-
-traitlets==5.9.0
-
 wordcloud
 streamlit
-
-
 requests
 black
-
 streamlit-shadcn-ui  
 loguru
 contiguity
